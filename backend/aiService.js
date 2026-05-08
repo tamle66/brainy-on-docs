@@ -2,15 +2,12 @@ require('dotenv').config({ path: '../.env' });
 const axios = require('axios');
 
 const {
-  GOOGLE_CLOUD_PROJECT,
-  GOOGLE_CLOUD_LOCATION,
-  API_ENDPOINT,
   MODEL_ID,
   GENERATE_CONTENT_API,
-  vertexAPIkey, // The auth token from user
+  vertexAPIkey,
 } = process.env;
 
-const vertexUrl = `${API_ENDPOINT}/v1/projects/${GOOGLE_CLOUD_PROJECT}/locations/${GOOGLE_CLOUD_LOCATION}/publishers/google/models/${MODEL_ID}:${GENERATE_CONTENT_API}`;
+const vertexUrl = `https://aiplatform.googleapis.com/v1/publishers/google/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${vertexAPIkey}`;
 
 /**
  * Call Vertex AI Gemini 2.5 Flash API
@@ -20,12 +17,12 @@ async function callGemini(prompt) {
     const response = await axios.post(
       vertexUrl,
       {
-        contents: {
-          role: 'user',
-          parts: {
-            text: prompt,
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: prompt }],
           },
-        },
+        ],
         generationConfig: {
           responseMimeType: 'application/json',
         }
@@ -33,7 +30,6 @@ async function callGemini(prompt) {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${vertexAPIkey}`,
         },
       }
     );
