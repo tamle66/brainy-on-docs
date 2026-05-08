@@ -5,7 +5,8 @@ const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const WebpackBar = require('webpackbar');
 const webpack = require('webpack');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config(); // Load from current dir (.env)
+require('dotenv').config({ path: '../.env' }); // Fallback to root .env if needed
 const {
   docsAddonDevMiddleware,
   docsAddonWebpackPlugin,

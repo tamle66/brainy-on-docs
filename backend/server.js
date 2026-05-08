@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../.env' }); // Load from parent dir
+require('dotenv').config(); // Load from current dir
+require('dotenv').config({ path: '../.env' }); // Fallback for local dev if needed
 const express = require('express');
 const cors = require('cors');
 const { analyzeGrammar, analyzeTone, analyzeRewrite } = require('./aiService');
