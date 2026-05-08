@@ -6,10 +6,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const WebpackBar = require('webpackbar');
 const webpack = require('webpack');
 require('dotenv').config({ path: '../.env' });
-// const {
-//   docsAddonDevMiddleware,
-//   docsAddonWebpackPlugin,
-// } = require('@lark-opdev/block-docs-addon-webpack-utils');
+const {
+  docsAddonDevMiddleware,
+  docsAddonWebpackPlugin,
+} = require('@lark-opdev/block-docs-addon-webpack-utils');
 
 const cwd = process.cwd();
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -80,8 +80,8 @@ const config = {
     ...(isDevelopment
       ? [new ReactRefreshWebpackPlugin() /*, new WebpackBar()*/]
       : [new MiniCssExtractPlugin()]),
-    // new docsAddonWebpackPlugin({
-    // }),
+    new docsAddonWebpackPlugin({
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './src/index.html',
@@ -127,9 +127,9 @@ const config = {
           if (!devServer || !devServer.app) {
             throw new Error('webpack-dev-server is not defined');
           }
-          // docsAddonDevMiddleware(devServer).then((middleware) => {
-          //   devServer.app.use(middleware);
-          // });
+          docsAddonDevMiddleware(devServer).then((middleware) => {
+            devServer.app.use(middleware);
+          });
           return middlewares;
         },
       },

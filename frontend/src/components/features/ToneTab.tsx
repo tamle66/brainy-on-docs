@@ -11,7 +11,7 @@ import {
 import { analyzeTone } from '@/services/api';
 import { DocMiniApp } from '@/App';
 
-export const ToneTab = ({ docRef }: { docRef: any }) => {
+export const ToneTab = ({ docRef, systemPrompt }: { docRef: any, systemPrompt?: string }) => {
   const [loading, setLoading] = useState(false);
   const [targetTone, setTargetTone] = useState("Professional");
   const [result, setResult] = useState<any>(null);
@@ -38,7 +38,7 @@ export const ToneTab = ({ docRef }: { docRef: any }) => {
         return;
       }
       
-      const res = await analyzeTone(fullText, targetTone);
+      const res = await analyzeTone(fullText, targetTone, 'vi', systemPrompt);
       setResult(res);
     } catch (err) {
       console.error(err);
@@ -50,10 +50,10 @@ export const ToneTab = ({ docRef }: { docRef: any }) => {
   return (
     <div className="flex flex-col h-full gap-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700">Sắc thái mục tiêu</label>
+        <label className="text-sm font-medium text-slate-700">Giọng văn mục tiêu</label>
         <Select value={targetTone} onValueChange={setTargetTone}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Chọn sắc thái" />
+            <SelectValue placeholder="Chọn giọng văn" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Professional">Chuyên nghiệp</SelectItem>
@@ -64,22 +64,22 @@ export const ToneTab = ({ docRef }: { docRef: any }) => {
         </Select>
       </div>
 
-      <Button onClick={handleRewrite} disabled={loading} className="w-full">
-        {loading ? 'Đang viết lại...' : 'Viết lại văn bản'}
+      <Button onClick={handleRewrite} disabled={loading} className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 text-sm font-medium">
+        {loading ? 'Đang xử lý...' : 'Phân tích & Điều chỉnh'}
       </Button>
 
       {result && (
         <Card className="mt-4 border-blue-100 bg-blue-50/30 shadow-sm">
           <CardContent className="pt-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-blue-600">Sắc thái hiện tại: {result.current_tone}</span>
-              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">Điểm: {result.tone_score}/100</span>
+              <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Giọng văn hiện tại: {result.current_tone}</span>
+              <span className="text-[10px] px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">Độ phù hợp: {result.tone_score}/100</span>
             </div>
-            <div className="text-sm text-slate-800 p-3 bg-white rounded border border-blue-100">
+            <div className="text-sm text-foreground p-3 bg-white rounded-lg border border-border/50 shadow-inner">
               {result.rewritten_text}
             </div>
-            <Button size="sm" variant="default" className="w-full mt-2">
-              Áp dụng
+            <Button size="sm" variant="outline" className="w-full mt-2 rounded-full font-medium" onClick={() => navigator.clipboard.writeText(result.rewritten_text)}>
+              Sao chép kết quả
             </Button>
           </CardContent>
         </Card>

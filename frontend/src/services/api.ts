@@ -1,13 +1,13 @@
-// Using the BACKEND_URL provided by Webpack DefinePlugin
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001'
+// Use localhost for local dev to avoid dead ngrok URLs
+const BACKEND_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : (process.env.BACKEND_URL || 'http://localhost:3001');
 
-export async function analyzeGrammar(text: string, language: string = 'vi') {
+export async function analyzeGrammar(text: string, language: string = 'vi', systemPrompt?: string) {
   const response = await fetch(`${BACKEND_URL}/api/analyze-grammar`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text, language }),
+    body: JSON.stringify({ text, language, systemPrompt }),
   })
   
   if (!response.ok) {
@@ -17,17 +17,33 @@ export async function analyzeGrammar(text: string, language: string = 'vi') {
   return response.json()
 }
 
-export async function analyzeTone(text: string, targetTone: string, language: string = 'vi') {
+export async function analyzeTone(text: string, targetTone: string, language: string = 'vi', systemPrompt?: string) {
   const response = await fetch(`${BACKEND_URL}/api/analyze-tone`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text, targetTone, language }),
+    body: JSON.stringify({ text, targetTone, language, systemPrompt }),
   })
   
   if (!response.ok) {
     throw new Error('Failed to analyze tone')
+  }
+
+  return response.json()
+}
+
+export async function analyzeRewrite(text: string, systemPrompt?: string) {
+  const response = await fetch(`${BACKEND_URL}/api/rewrite`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text, systemPrompt }),
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to analyze rewrite')
   }
 
   return response.json()

@@ -8,11 +8,14 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
 | # | Module | Status | Branch | Notes |
 |---|--------|--------|--------|-------|
 | 1 | Lark Add-on Deployment | ✅ Done | main | Basic setup, UI manifest, and upload |
-| 2 | Core Logic Implementation | 🔲 Not started | main | API integration and text replacement |
+| 2 | Core Logic Implementation & UI Refinement | 📋 Planned | main | UI update, API rewrite integration, selection handling |
 
 ## Active Tasks
-- [ ] Implement text selection and analysis via Gemini API — Module 2
-- [ ] Implement auto-fix (replace selected text) — Module 2
+- [ ] Task 1: Backend API Setup (Rewrite Endpoint) — Module 2
+- [ ] Task 2: Frontend Foundation & State (Settings, UI Tabs) — Module 2
+- [ ] Task 3: Lark SDK Integration (Get Selection) — Module 2
+- [ ] Task 4: AI Integration & UI Flow (Rewrite) — Module 2
+- [ ] Task 5: Lark SDK Integration (Replace Selection) — Module 2
 
 ## Known Issues
 - [ ] None currently

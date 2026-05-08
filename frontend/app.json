@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "appID": "cli_a976db898a785eed",
-  "appType": "docs-addon",
+  "appType": "block",
   "blockTypeID": "blk_69fc67942b408ee28ed7bf7f",
   "projectName": "frontend",
   "contributes": {
@@ -10,5 +10,6 @@
       "initialWidth": 350,
       "view": "index.html"
     }
-  }
+  },
+  "url": "https://jemmiadiamond.sg.larksuite.com/docx/AxbNdmtUTo5krwxbpnEl2PRdgjh"
 }

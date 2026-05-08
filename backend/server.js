@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '../.env' }); // Load from parent dir
 const express = require('express');
 const cors = require('cors');
-const { analyzeGrammar, analyzeTone } = require('./aiService');
+const { analyzeGrammar, analyzeTone, analyzeRewrite } = require('./aiService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -13,13 +13,13 @@ app.use(express.json());
 // Endpoint: Grammar & Spelling Analysis
 app.post('/api/analyze-grammar', async (req, res) => {
   try {
-    const { text, language = 'vi' } = req.body;
+    const { text, language = 'vi', systemPrompt } = req.body;
     
     if (!text) {
       return res.status(400).json({ error: 'Text is required' });
     }
 
-    const result = await analyzeGrammar(text, language);
+    const result = await analyzeGrammar(text, language, systemPrompt);
     res.json(result);
   } catch (error) {
     console.error('Error in analyze-grammar:', error.message);
@@ -30,17 +30,34 @@ app.post('/api/analyze-grammar', async (req, res) => {
 // Endpoint: Tone Analysis & Rewrite
 app.post('/api/analyze-tone', async (req, res) => {
   try {
-    const { text, targetTone, language = 'vi' } = req.body;
+    const { text, targetTone, language = 'vi', systemPrompt } = req.body;
     
     if (!text || !targetTone) {
       return res.status(400).json({ error: 'Text and targetTone are required' });
     }
 
-    const result = await analyzeTone(text, targetTone, language);
+    const result = await analyzeTone(text, targetTone, language, systemPrompt);
     res.json(result);
   } catch (error) {
     console.error('Error in analyze-tone:', error.message);
     res.status(500).json({ error: 'Failed to analyze tone' });
+  }
+});
+
+// Endpoint: Rewrite based on System Prompt
+app.post('/api/rewrite', async (req, res) => {
+  try {
+    const { text, systemPrompt } = req.body;
+    
+    if (!text) {
+      return res.status(400).json({ error: 'Text is required' });
+    }
+
+    const result = await analyzeRewrite(text, systemPrompt);
+    res.json(result);
+  } catch (error) {
+    console.error('Error in rewrite:', error.message);
+    res.status(500).json({ error: 'Failed to rewrite text' });
   }
 });
 
