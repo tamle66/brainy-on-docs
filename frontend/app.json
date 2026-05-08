@@ -1,0 +1,14 @@
+{
+  "manifestVersion": 1,
+  "appID": "cli_a976db898a785eed",
+  "appType": "docs-addon",
+  "blockTypeID": "blk_69fc67942b408ee28ed7bf7f",
+  "projectName": "frontend",
+  "contributes": {
+    "topbar": {
+      "initialHeight": 500,
+      "initialWidth": 350,
+      "view": "index.html"
+    }
+  }
+}
