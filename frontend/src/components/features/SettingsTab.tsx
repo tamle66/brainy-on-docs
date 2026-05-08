@@ -23,13 +23,13 @@ export const SettingsTab = ({ systemPrompt, setSystemPrompt }: SettingsTabProps)
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-6">
       <div className="flex flex-col gap-2">
         <Label htmlFor="system-prompt" className="text-sm font-semibold">
           System Prompt chung
         </Label>
-        <p className="text-xs text-slate-500">
-          Chỉ thị hệ thống này sẽ được áp dụng cho tất cả các tính năng AI (Kiểm tra lỗi, Sắc thái, Viết lại).
+        <p className="text-xs text-muted-foreground">
+          Chỉ thị hệ thống này sẽ được áp dụng khi bấm nút "Viết lại đoạn này". Để dùng các prompt chuyên biệt, hãy tạo Skills trong tab Skills.
         </p>
         <Textarea
           id="system-prompt"
@@ -40,8 +40,8 @@ export const SettingsTab = ({ systemPrompt, setSystemPrompt }: SettingsTabProps)
         />
       </div>
       
-      <Button onClick={handleSave} className="w-full">
-        {isSaved ? "Đã lưu!" : "Lưu cài đặt"}
+      <Button onClick={handleSave} className="w-full rounded-full h-9 text-sm font-medium">
+        {isSaved ? "✓ Đã lưu!" : "Lưu cài đặt"}
       </Button>
     </div>
   );

@@ -1,12 +1,12 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BlockitClient, DocumentRef } from '@lark-opdev/block-docs-addon-api';
 import './index.css';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GrammarTab } from '@/components/features/GrammarTab';
-import { ToneTab } from '@/components/features/ToneTab';
 import { RewriteTab } from '@/components/features/RewriteTab';
+import { SkillsActionTab } from '@/components/features/SkillsActionTab';
 import { SettingsTab } from '@/components/features/SettingsTab';
+import { SkillsTab, loadSkills, Skill } from '@/components/features/SkillsTab';
 
 export const DocMiniApp = new BlockitClient().initAPI();
 
@@ -14,13 +14,12 @@ export default () => {
   const docRef = useRef<DocumentRef | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState<string>('');
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    // Load system prompt from localStorage on mount
     const savedPrompt = localStorage.getItem('lark_addon_system_prompt');
-    if (savedPrompt) {
-      setSystemPrompt(savedPrompt);
-    }
+    if (savedPrompt) setSystemPrompt(savedPrompt);
+    setSkills(loadSkills());
   }, []);
 
   const handleSetSystemPrompt = (prompt: string) => {
@@ -28,51 +27,64 @@ export default () => {
     localStorage.setItem('lark_addon_system_prompt', prompt);
   };
 
+  const handleSkillsChange = (updated: Skill[]) => setSkills(updated);
+
   useEffect(() => {
     (async () => {
-      // Get document ref when component mounts
-      docRef.current = await DocMiniApp.getActiveDocumentRef();
-      setIsReady(true);
+      try {
+        console.log('Initializing DocMiniApp...');
+        // Timeout after 5 seconds if SDK doesn't respond
+        const timeout = setTimeout(() => {
+          if (!isReady) {
+            console.warn('Initialization timeout. Forcing ready state.');
+            setIsReady(true);
+          }
+        }, 5000);
+
+        docRef.current = await DocMiniApp.getActiveDocumentRef();
+        console.log('DocRef initialized:', docRef.current);
+        clearTimeout(timeout);
+        setIsReady(true);
+      } catch (err) {
+        console.error('Failed to initialize Add-on:', err);
+        setIsReady(true); // Still show UI even if docRef fails
+      }
     })();
   }, []);
 
   return (
-    <div className="w-full h-full min-h-screen bg-background flex flex-col p-4 font-sans text-foreground">
-      <div className="flex items-center gap-2 mb-6">
-        <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">Trợ lý AI</h1>
-      </div>
-
+    <div className="w-full h-full min-h-screen bg-background flex flex-col p-4 pt-2 font-sans text-foreground">
       {isReady ? (
         <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-4 bg-muted rounded-xl p-1 h-auto border border-border/50">
-            <TabsTrigger value="grammar" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-medium text-xs py-2 text-muted-foreground transition-all">Soát lỗi</TabsTrigger>
-            <TabsTrigger value="tone" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-medium text-xs py-2 text-muted-foreground transition-all">Giọng văn</TabsTrigger>
-            <TabsTrigger value="rewrite" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-medium text-xs py-2 text-muted-foreground transition-all">Viết lại</TabsTrigger>
-            <TabsTrigger value="settings" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-medium text-xs py-2 text-muted-foreground transition-all">Cấu hình</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-muted/50 rounded-xl p-1 h-11 mb-2">
+            <TabsTrigger value="rewrite" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Viết lại</TabsTrigger>
+            <TabsTrigger value="skills-action" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kỹ năng</TabsTrigger>
+            <TabsTrigger value="settings" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">
+              <svg className="w-3.5 h-3.5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="grammar" className="flex-1 overflow-y-auto mt-4">
-            <GrammarTab docRef={docRef} systemPrompt={systemPrompt} />
-          </TabsContent>
-
-          <TabsContent value="tone" className="flex-1 overflow-y-auto mt-4">
-            <ToneTab docRef={docRef} systemPrompt={systemPrompt} />
-          </TabsContent>
-
           <TabsContent value="rewrite" className="flex-1 overflow-y-auto mt-4">
-            <RewriteTab docRef={docRef} systemPrompt={systemPrompt} />
+            <RewriteTab docRef={docRef} systemPrompt={systemPrompt} skills={skills} />
+          </TabsContent>
+
+          <TabsContent value="skills-action" className="flex-1 overflow-y-auto mt-4">
+            <SkillsActionTab docRef={docRef} skills={skills} />
           </TabsContent>
 
           <TabsContent value="settings" className="flex-1 overflow-y-auto mt-4">
             <SettingsTab systemPrompt={systemPrompt} setSystemPrompt={handleSetSystemPrompt} />
+            <div className="mt-6 border-t border-border/60 pt-6">
+              <SkillsTab skills={skills} onSkillsChange={handleSkillsChange} />
+            </div>
           </TabsContent>
         </Tabs>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground text-sm gap-3">
-          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           Đang đồng bộ dữ liệu...
         </div>
       )}

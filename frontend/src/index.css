@@ -1,116 +1,130 @@
 @import "tailwindcss";
+
 @theme {
-  /* Minimalist Brainy Aesthetic Colors */
-  --color-border: hsl(0, 0%, 90%);
-  --color-input: hsl(0, 0%, 90%);
-  --color-ring: hsl(0, 0%, 9%);
-  
-  --color-background: hsl(0, 0%, 98%); /* Off-white background */
-  --color-foreground: hsl(0, 0%, 9%); /* Dark charcoal text */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-card: hsl(0, 0%, 100%);
-  --color-card-foreground: hsl(0, 0%, 9%);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
 
-  --color-popover: hsl(0, 0%, 100%);
-  --color-popover-foreground: hsl(0, 0%, 9%);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
 
-  --color-primary: hsl(0, 0%, 9%); /* Solid black for primary actions */
-  --color-primary-foreground: hsl(0, 0%, 98%);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
-  --color-secondary: hsl(0, 0%, 96%); /* Very light gray */
-  --color-secondary-foreground: hsl(0, 0%, 9%);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 
-  --color-destructive: hsl(0, 84%, 60%);
-  --color-destructive-foreground: hsl(0, 0%, 98%);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
-  --color-muted: hsl(0, 0%, 94%); /* Light gray */
-  --color-muted-foreground: hsl(0, 0%, 40%); /* Gray text */
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
-  --color-accent: hsl(0, 0%, 94%);
-  --color-accent-foreground: hsl(0, 0%, 9%);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
-  /* Standard minimalist corners */
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 2rem;
-  --radius-full: 9999px; /* For pill buttons */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 
-  --radius-lg: 0.75rem;
-  --radius-md: 0.5rem;
-  --radius-sm: 0.25rem;
-  
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
 }
 
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-
+    --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Custom Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 78%) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 80%);
+    border-radius: 9999px;
+  }
+}
+
+/* Markdown Styling */
+.markdown-content h1 { font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.markdown-content p { margin-bottom: 0.5rem; line-height: 1.5; }
+.markdown-content ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+.markdown-content li { margin-bottom: 0.25rem; }
+
+/* Fix Transparent Select/Popover */
+[data-radix-popper-content-wrapper] {
+  z-index: 100 !important;
+}
+
+div[role="listbox"], div[data-radix-select-content] {
+  background-color: hsl(var(--card)) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
