@@ -1,6 +1,20 @@
 # Changelog
 Format: [date] [module] [type: feat/fix/refactor/docs] — description
 
+## [1.1.5] - 2026-05-08
+### Added
+- **Module 04: Inline Suggestion**:
+  - Tự động phát hiện lỗi typing/grammar sau khi dừng gõ 1.5s.
+  - Hiển thị danh sách Suggestion Cards trong tab "Kiểm tra".
+  - Tự động highlight màu vàng + underline các từ lỗi trực tiếp trong Lark Docs dùng native SDK API.
+  - Hỗ trợ Apply (sửa trực tiếp vào doc) và Dismiss (ẩn highlight/card).
+  - Layout 4 tabs mới: Viết lại, Kiểm tra, Kỹ năng, Cài đặt.
+  - Backend: Phân loại lỗi thành `spelling` và `grammar`.
+- **Optimization & UX Fix (GrammarTab)**:
+  - Tránh re-scan toàn bộ sau khi Apply/Dismiss (giữ lại các lỗi cũ).
+  - Tự động điều hướng (scroll + select) tới vị trí lỗi khi click vào card.
+  - Cập nhật hash thủ công để tránh polling loop kích hoạt sai thời điểm.
+
 ## 2026-05-08
 - docs: Khởi tạo project documentation theo workflow /init-project
 - docs: Đã hoàn thành Module 1 (Lark Add-on Deployment)

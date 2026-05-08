@@ -88,7 +88,7 @@ const config = {
       publicPath: isDevelopment ? '/block/' : './',
     }),
     new webpack.DefinePlugin({
-      'process.env.BACKEND_URL': JSON.stringify(process.env.ngrokURL),
+      'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL || process.env.ngrokURL),
     }),
   ],
   resolve: {

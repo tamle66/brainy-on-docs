@@ -4,6 +4,7 @@ import './index.css';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RewriteTab } from '@/components/features/RewriteTab';
+import { GrammarTab } from '@/components/features/GrammarTab';
 import { SkillsActionTab } from '@/components/features/SkillsActionTab';
 import { SettingsTab } from '@/components/features/SettingsTab';
 import { SkillsTab, loadSkills, Skill } from '@/components/features/SkillsTab';
@@ -56,8 +57,9 @@ export default () => {
     <div className="w-full h-full min-h-screen bg-background flex flex-col p-4 pt-2 font-sans text-foreground">
       {isReady ? (
         <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-3 bg-muted/50 rounded-xl p-1 h-11 mb-2">
+          <TabsList className="grid w-full grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 mb-2">
             <TabsTrigger value="rewrite" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Viết lại</TabsTrigger>
+            <TabsTrigger value="grammar" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kiểm tra</TabsTrigger>
             <TabsTrigger value="skills-action" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kỹ năng</TabsTrigger>
             <TabsTrigger value="settings" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">
               <svg className="w-3.5 h-3.5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,6 +71,10 @@ export default () => {
 
           <TabsContent value="rewrite" className="flex-1 overflow-y-auto mt-4">
             <RewriteTab docRef={docRef} systemPrompt={systemPrompt} skills={skills} />
+          </TabsContent>
+
+          <TabsContent value="grammar" className="flex-1 overflow-y-auto mt-4">
+            <GrammarTab docRef={docRef} />
           </TabsContent>
 
           <TabsContent value="skills-action" className="flex-1 overflow-y-auto mt-4">

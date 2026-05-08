@@ -16,6 +16,8 @@ describe('AI Service Integration Test', () => {
       expect(result.errors[0]).toHaveProperty('original');
       expect(result.errors[0]).toHaveProperty('replacement');
       expect(result.errors[0]).toHaveProperty('reason');
+      expect(result.errors[0]).toHaveProperty('type');
+      expect(['spelling', 'grammar']).toContain(result.errors[0].type);
     }
   }, 30000); // Set timeout to 30s for API call
 });
