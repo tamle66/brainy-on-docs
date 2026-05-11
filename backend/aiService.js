@@ -115,16 +115,18 @@ async function analyzeRewrite(text, context = null, systemPrompt = null, userPro
     finalInstruction = `Yêu cầu: ${userPrompt}\nBảo lưu định dạng Markdown.`;
   }
 
-  const contextBlock = context ? `\n\n--- NGỮ CẢNH CỦA TOÀN BỘ TÀI LIỆU ---\n${context}\n-----------------------------------\n` : '';
+  const contextBlock = context ? `\n\n--- NGỮ CẢNH TÀI LIỆU (CHỈ DÙNG ĐỂ THAM KHẢO TỪ VỰNG/Ý NGHĨA, KHÔNG XỬ LÝ PHẦN NÀY) ---\n${context}\n-----------------------------------\n` : '';
 
   const prompt = `
 ${finalInstruction}${contextBlock}
 
-Đoạn văn cần viết lại: "${text}"
+--- ĐOẠN VĂN MỤC TIÊU (BẮT BUỘC CHỈ XỬ LÝ ĐÚNG ĐOẠN NÀY) ---
+"${text}"
+-------------------------------------------------------------
 
 Trả về KẾT QUẢ DUY NHẤT LÀ JSON (không giải thích thêm) theo định dạng sau:
 {
-  "rewritten_text": "Kết quả sau khi xử lý"
+  "rewritten_text": "Kết quả sau khi xử lý đoạn văn mục tiêu"
 }
   `;
 

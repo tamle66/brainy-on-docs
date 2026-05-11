@@ -187,7 +187,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
       <div className="flex items-center gap-2 px-1 mb-1">
         <div className={`h-1.5 w-1.5 rounded-full ${selectionText.trim() ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
         <span className="text-[11px] text-muted-foreground">
-          {selectionText.trim() ? `Đang dùng ${selectionText.trim().length} ký tự đã chọn` : 'Sẽ sử dụng toàn bộ nội dung tài liệu'}
+          {selectionText.trim() ? `Đang áp dụng cho ${selectionText.trim().length} ký tự được bôi đen` : 'Đang áp dụng cho toàn bộ tài liệu'}
         </span>
       </div>
 
@@ -236,7 +236,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
         ) : (
           <>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-            Viết lại đoạn này
+            {selectionText.trim() ? 'Viết lại đoạn được chọn' : 'Viết lại toàn bộ tài liệu'}
           </>
         )}
       </Button>

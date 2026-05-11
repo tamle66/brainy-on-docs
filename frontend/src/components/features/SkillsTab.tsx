@@ -248,9 +248,9 @@ export const SkillsTab = ({ skills, onSkillsChange }: SkillsTabProps) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">Quản lý Skills</h3>
+          <h3 className="text-sm font-semibold text-foreground">Quản lý Phong cách & Kỹ năng</h3>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            {skills.filter(s => s.isActive).length} active / {skills.length} tổng
+            {skills.filter(s => s.isActive).length} đang bật / {skills.length} tổng số
           </p>
         </div>
         {!isEditing && (
@@ -266,7 +266,7 @@ export const SkillsTab = ({ skills, onSkillsChange }: SkillsTabProps) => {
         <SkillForm
           formName={formName} formDesc={formDesc} formPrompt={formPrompt} formIcon={formIcon} formCategory={formCategory}
           setFormName={setFormName} setFormDesc={setFormDesc} setFormPrompt={setFormPrompt} setFormIcon={setFormIcon} setFormCategory={setFormCategory}
-          onSave={handleSave} onCancel={resetForm} title="Tạo skill mới" saveLabel="Tạo skill"
+          onSave={handleSave} onCancel={resetForm} title="Tạo mới" saveLabel="Tạo mới"
         />
       )}
 
@@ -279,7 +279,7 @@ export const SkillsTab = ({ skills, onSkillsChange }: SkillsTabProps) => {
         <Card className="border-dashed border-2 border-border/60 bg-muted/20 rounded-xl">
           <CardContent className="flex flex-col items-center justify-center py-8 gap-2">
             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center"><span className="text-lg">⚡</span></div>
-            <p className="text-xs text-muted-foreground text-center max-w-[200px]">Tạo Skills để nhanh chóng biến đổi văn bản.</p>
+            <p className="text-xs text-muted-foreground text-center max-w-[200px]">Tạo Phong cách hoặc Kỹ năng để nhanh chóng biến đổi văn bản.</p>
           </CardContent>
         </Card>
       )}
@@ -346,7 +346,7 @@ const SkillForm = ({
         ))}
       </div>
 
-      <Input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Tên skill" className="h-8 text-sm rounded-lg" />
+      <Input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Tên hiển thị..." className="h-8 text-sm rounded-lg" />
       <Input value={formDesc} onChange={(e) => setFormDesc(e.target.value)} placeholder="Mô tả ngắn" className="h-8 text-xs rounded-lg" />
       <Textarea value={formPrompt} onChange={(e) => setFormPrompt(e.target.value)} placeholder="System prompt cho AI..." className="min-h-[80px] text-xs resize-none rounded-lg" />
       <div className="flex gap-2">
@@ -395,7 +395,7 @@ const SkillCard = ({
         <SkillForm
           formName={formName} formDesc={formDesc} formPrompt={formPrompt} formIcon={formIcon} formCategory={formCategory}
           setFormName={setFormName} setFormDesc={setFormDesc} setFormPrompt={setFormPrompt} setFormIcon={setFormIcon} setFormCategory={setFormCategory}
-          onSave={onSave} onCancel={onCancel} title="Chỉnh sửa skill" saveLabel="Lưu thay đổi"
+          onSave={onSave} onCancel={onCancel} title="Chỉnh sửa" saveLabel="Lưu thay đổi"
         />
       ) : (
         <>

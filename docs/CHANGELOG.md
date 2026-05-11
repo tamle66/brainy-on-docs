@@ -24,6 +24,7 @@ Format: [date] [module] [type: feat/fix/refactor/docs] — description
 
 ## 2026-05-08
 - 2026-05-08 [Module 1] docs: Khởi tạo project documentation theo workflow /init-project
+- 2026-05-11 [Module 2] fix: Lỗi AI thực hiện lệnh cho toàn bộ văn bản thay vì đoạn bôi đen ở tab Kỹ Năng. Root cause: LLM bị nhiễu do frontend truyền toàn bộ văn bản vào tham số `context`, khiến AI ưu tiên xử lý (dịch/tóm tắt) phần context thay vì phần text được chọn. Đã fix bằng cách gỡ bỏ `context` khỏi payload của tab Kỹ Năng.
 - 2026-05-11 [Module 2] fix: Lỗi tab Kỹ Năng bỏ qua system prompt của người dùng. Root cause: Hàm `analyzeRewrite` bị truyền thiếu tham số `context`, đẩy `skill.prompt` vào nhầm vị trí `context` thay vì `systemPrompt`. Đồng thời, cập nhật luôn sang Markdown để giữ định dạng gốc.
 - 2026-05-11 [Module 2] fix: Lỗi Rewrite bị mất định dạng gốc. Root cause: Hàm `getSelectionAsPlainText` không lấy Markdown. Đã sửa bằng `getSelectionAsMarkdown` và `getDocAsMarkdown`.
 - 2026-05-08 [Module 2] docs: Completed module planning
