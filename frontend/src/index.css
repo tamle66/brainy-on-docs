@@ -110,11 +110,28 @@
   }
 }
 
-/* Markdown Styling */
-.markdown-content h1 { font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.markdown-content p { margin-bottom: 0.5rem; line-height: 1.5; white-space: pre-wrap; }
-.markdown-content ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
-.markdown-content li { margin-bottom: 0.25rem; }
+/* Markdown Styling (Comprehensive) */
+.markdown-content { word-wrap: break-word; }
+.markdown-content h1 { font-size: 1.5em; font-weight: 700; margin-top: 1.2em; margin-bottom: 0.5em; line-height: 1.3; }
+.markdown-content h2 { font-size: 1.25em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; line-height: 1.3; }
+.markdown-content h3 { font-size: 1.125em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; line-height: 1.3; }
+.markdown-content h4, .markdown-content h5, .markdown-content h6 { font-size: 1em; font-weight: 600; margin-top: 1em; margin-bottom: 0.5em; line-height: 1.4; }
+.markdown-content p { margin-top: 0; margin-bottom: 0.75em; line-height: 1.6; white-space: pre-wrap; }
+.markdown-content strong, .markdown-content b { font-weight: 700; color: inherit; }
+.markdown-content em, .markdown-content i { font-style: italic; }
+.markdown-content ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.75em; margin-top: 0.25em; }
+.markdown-content ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 0.75em; margin-top: 0.25em; }
+.markdown-content li { margin-bottom: 0.25em; }
+.markdown-content li > p { margin-bottom: 0.25em; }
+.markdown-content li > ul, .markdown-content li > ol { margin-top: 0.25em; margin-bottom: 0; }
+.markdown-content blockquote { border-left: 4px solid hsl(var(--border)); padding-left: 1em; color: hsl(var(--muted-foreground)); margin-top: 0.75em; margin-bottom: 0.75em; font-style: italic; }
+.markdown-content code { background-color: hsl(var(--muted)/0.8); padding: 0.15em 0.3em; border-radius: 0.25rem; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.markdown-content pre { background-color: hsl(var(--muted)/0.5); border: 1px solid hsl(var(--border)); padding: 0.75em; border-radius: 0.5rem; overflow-x: auto; margin-top: 0.75em; margin-bottom: 0.75em; }
+.markdown-content pre code { background-color: transparent; padding: 0; border-radius: 0; font-size: 0.85em; white-space: pre; }
+.markdown-content hr { margin-top: 1.5em; margin-bottom: 1.5em; border: 0; border-top: 1px solid hsl(var(--border)); }
+.markdown-content a { color: hsl(var(--primary)); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s; }
+.markdown-content a:hover { color: hsl(var(--foreground)); }
+.markdown-content *:last-child { margin-bottom: 0; }
 
 /* Fix Transparent Select/Popover */
 [data-radix-popper-content-wrapper] {
