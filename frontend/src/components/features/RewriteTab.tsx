@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { analyzeRewrite } from '@/services/api';
-import { extractFullDocText, extractFullDocBlockRefs } from '@/services/lark';
+import { extractFullDocText, extractFullDocBlockRefs, extractFullDocMarkdown } from '@/services/lark';
 import { DocMiniApp } from '@/App';
 import type { Skill } from './SkillsTab';
 import ReactMarkdown from 'react-markdown';
@@ -41,7 +41,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
     const handleSelectionChange = async () => {
       if (!docRef.current) return;
       try {
-        const text = await DocMiniApp.Selection.getSelectionAsPlainText(docRef.current);
+        const text = await DocMiniApp.Selection.getSelectionAsMarkdown(docRef.current);
         setSelectionText(text || '');
       } catch (err) {
         console.error('Failed to get selection:', err);
@@ -110,7 +110,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
       }
 
       if (!inputText && docRef.current) {
-        inputText = await extractFullDocText(docRef);
+        inputText = await extractFullDocMarkdown();
         // If no selection, capture ALL block refs for full document replacement
         currentRefs = await extractFullDocBlockRefs(docRef);
       }
@@ -124,7 +124,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
       // Always try to get full doc text as context
       let contextText = '';
       if (docRef.current) {
-         contextText = await extractFullDocText(docRef);
+         contextText = await extractFullDocMarkdown();
       }
 
       setCapturedBlockRefs(currentRefs);

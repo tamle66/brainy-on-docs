@@ -12,6 +12,15 @@ export async function extractFullDocText(docRef: any): Promise<string> {
   return fullText.trim();
 }
 
+export async function extractFullDocMarkdown(): Promise<string> {
+  try {
+    return await DocMiniApp.Document.getDocAsMarkdown();
+  } catch (err) {
+    console.warn('Failed to get doc as markdown', err);
+    return '';
+  }
+}
+
 export async function extractFullDocBlockRefs(docRef: any): Promise<any[]> {
   if (!docRef.current) return [];
   const rootBlock = await DocMiniApp.Document.getRootBlock(docRef.current);

@@ -22,8 +22,8 @@ Format: [date] [module] [type: feat/fix/refactor/docs] — description
   - Cập nhật hash thủ công để tránh polling loop kích hoạt sai thời điểm.
 
 ## 2026-05-08
-- docs: Khởi tạo project documentation theo workflow /init-project
-- docs: Đã hoàn thành Module 1 (Lark Add-on Deployment)
+- 2026-05-08 [Module 1] docs: Khởi tạo project documentation theo workflow /init-project
+- 2026-05-11 [Module 2] fix: Lỗi Rewrite bị mất định dạng gốc. Root cause: Hàm `getSelectionAsPlainText` không lấy Markdown. Đã sửa bằng `getSelectionAsMarkdown` và `getDocAsMarkdown`.
 - 2026-05-08 [Module 2] docs: Completed module planning
 - 2026-05-08 [Module 2] fix: Build failed with Tailwind CSS. Root cause: Missing Shadcn UI theme configuration and correct tailwind import. Fixed by updating `tailwind.config.js` and `index.css`.
 - 2026-05-08 [Module 2] feat: Auto-detect selection using `onSelectionChange`.
