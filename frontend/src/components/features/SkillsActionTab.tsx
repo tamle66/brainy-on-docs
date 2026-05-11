@@ -146,7 +146,7 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
   const currentSkill = activeSkills.find((s) => s.id === selectedSkillId);
 
   return (
-    <div className="flex flex-col h-full gap-4 pb-6">
+    <div className="flex flex-col gap-4 pb-6">
       {/* Input indicator */}
       <div className="flex items-center gap-2 px-1">
         <div className={`h-1.5 w-1.5 rounded-full ${selectionText.trim() ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
@@ -208,7 +208,7 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
       )}
 
       {/* Result */}
-      <ScrollArea className="flex-1">
+      <div className="flex-1">
         {loading ? (
           <div className="space-y-2">
             <Skeleton className="h-4 w-full rounded" />
@@ -259,7 +259,7 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
             </CardFooter>
           </Card>
         ) : null}
-      </ScrollArea>
+      </div>
     </div>
   );
 };

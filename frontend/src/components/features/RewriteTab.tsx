@@ -182,7 +182,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
   const selectedStyle = activeStyles.find((s) => s.id === selectedStyleId);
 
   return (
-    <div className="flex flex-col h-full gap-4 pb-6">
+    <div className="flex flex-col gap-4 pb-6">
       {/* Selection indicator */}
       <div className="flex items-center gap-2 px-1 mb-1">
         <div className={`h-1.5 w-1.5 rounded-full ${selectionText.trim() ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
@@ -242,7 +242,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
       </Button>
 
       {/* Result */}
-      <ScrollArea className="flex-1">
+      <div className="flex-1">
         {loading ? (
           <Skeleton className="h-32 w-full rounded-xl" />
         ) : replacedState ? (
@@ -279,7 +279,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
             </CardFooter>
           </Card>
         ) : null}
-      </ScrollArea>
+      </div>
     </div>
   );
 };
