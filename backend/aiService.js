@@ -2,51 +2,46 @@ require('dotenv').config({ path: '../.env' });
 const axios = require('axios');
 
 const {
-  MODEL_ID,
-  GENERATE_CONTENT_API,
-  vertexAPIkey,
+  AIPROXY_HEADER_AUTH_NAME,
+  AIPROXY_HEADER_AUTH_VALUE,
 } = process.env;
 
-const vertexUrl = `https://aiplatform.googleapis.com/v1/publishers/google/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${vertexAPIkey}`;
+const proxyUrl = 'https://aiproxy.jemmia.vn/v1/chat/completions';
 
 /**
- * Call Vertex AI Gemini 2.5 Flash API
+ * Call AI Proxy
  */
 async function callGemini(prompt, systemPrompt = null) {
   try {
+    const messages = [];
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    }
+    messages.push({ role: 'user', content: prompt });
+
     const payload = {
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: prompt }],
-        },
-      ],
-      generationConfig: {
-        responseMimeType: 'application/json',
-      }
+      model: 'gemini-2.5-flash-lite',
+      messages: messages,
     };
 
-    if (systemPrompt) {
-      payload.systemInstruction = {
-        role: 'system',
-        parts: [{ text: systemPrompt }]
-      };
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    if (AIPROXY_HEADER_AUTH_NAME && AIPROXY_HEADER_AUTH_VALUE) {
+      headers[AIPROXY_HEADER_AUTH_NAME] = AIPROXY_HEADER_AUTH_VALUE;
     }
 
-    const response = await axios.post(
-      vertexUrl,
-      payload,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axios.post(proxyUrl, payload, { headers });
 
-    const resultText = response.data.candidates[0].content.parts[0].text;
-    return JSON.parse(resultText);
+    const resultText = response.data.choices[0].message.content;
+    
+    // Clean potential markdown code blocks (```json ... ```)
+    const cleanedText = resultText.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    
+    return JSON.parse(cleanedText);
   } catch (error) {
-    console.error('Gemini API Error:', error.response ? error.response.data : error.message);
+    console.error('AI Proxy Error:', error.response ? JSON.stringify(error.response.data) : error.message);
     throw error;
   }
 }
