@@ -11,6 +11,7 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
 | 2 | Core Logic Implementation & UI Refinement | 📋 Planned | main | UI update, API rewrite integration, selection handling |
 | 3 | Tùy chỉnh (Flexibility & Skills) | 📋 Planned | main | Presets management & Skills integration |
 | 4 | Inline Suggestion (Typing Check) | ✅ Done | main | Real-time grammar/spelling detect khi đang gõ |
+| 5 | Dynamic Size Toggle | 📋 Planned | main | Toggle Add-on size using Bridge API |
 
 ## Active Tasks
 - [x] Task 1: Backend API Setup (Rewrite Endpoint) — Module 2
@@ -30,6 +31,11 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
   - [x] Điều hướng tới vị trí lỗi (Viewport navigation)
   - [x] Bỏ qua vĩnh viễn lỗi bằng LocalStorage (Persistent Ignore History)
   - [x] Tự động scroll và highlight Card theo vị trí con trỏ chuột
+
+  - [ ] Module 05: Dynamic Size Toggle
+  - [ ] Task 1: Tạo UI nút Toggle Size
+  - [ ] Task 2: Implement logic thay đổi trạng thái và lưu `localStorage`
+  - [ ] Task 3: Kết nối với `DocMiniApp.Bridge.updateResize()`
 
 ## 🚀 Sẵn sàng Deployment
 - [x] Cấu hình Webpack linh hoạt cho production

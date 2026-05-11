@@ -3,7 +3,7 @@ import { BlockitClient, DocumentRef } from '@lark-opdev/block-docs-addon-api';
 import './index.css';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GripVertical } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import { RewriteTab } from '@/components/features/RewriteTab';
 import { GrammarTab } from '@/components/features/GrammarTab';
 import { SkillsActionTab } from '@/components/features/SkillsActionTab';
@@ -17,10 +17,15 @@ export default () => {
   const [isReady, setIsReady] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [isWideMode, setIsWideMode] = useState(false);
 
   useEffect(() => {
     const savedPrompt = localStorage.getItem('lark_addon_system_prompt');
     if (savedPrompt) setSystemPrompt(savedPrompt);
+    
+    const savedWideMode = localStorage.getItem('lark_addon_is_wide_mode');
+    if (savedWideMode === 'true') setIsWideMode(true);
+    
     setSkills(loadSkills());
   }, []);
 
@@ -30,6 +35,13 @@ export default () => {
   };
 
   const handleSkillsChange = (updated: Skill[]) => setSkills(updated);
+
+  useEffect(() => {
+    if (isReady) {
+      DocMiniApp.Bridge.updateResize({ width: isWideMode ? 450 : 350 });
+      localStorage.setItem('lark_addon_is_wide_mode', String(isWideMode));
+    }
+  }, [isWideMode, isReady]);
 
   useEffect(() => {
     (async () => {
@@ -55,18 +67,21 @@ export default () => {
   }, []);
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-background flex flex-col p-4 pt-2 font-sans text-foreground relative">
-      {/* Nút gợi ý kéo thả (Resize Hint) nằm ở sát mép trái */}
-      <div 
-        className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-16 flex items-center justify-center text-muted-foreground/30 hover:text-muted-foreground/80 cursor-ew-resize transition-colors z-50 group"
-        title="Kéo mép trái để thay đổi kích thước"
-      >
-        <GripVertical className="w-3 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
-      </div>
+    <div className="w-full h-screen overflow-hidden bg-background flex flex-col p-4 pt-0 font-sans text-foreground relative">
+      {isReady && (
+        <button
+          onClick={() => setIsWideMode(!isWideMode)}
+          className="absolute bottom-4 right-4 z-50 h-9 w-9 flex items-center justify-center bg-card/80 backdrop-blur-sm hover:bg-card text-muted-foreground/60 hover:text-foreground rounded-xl shadow-sm border border-border/40 hover:shadow-md transition-all"
+          title={isWideMode ? "Thu gọn giao diện" : "Mở rộng giao diện"}
+        >
+          {isWideMode ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+        </button>
+      )}
 
       {isReady ? (
-        <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 mb-2 shrink-0">
+        <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col min-h-0 pt-2">
+          <div className="flex w-full items-center gap-1 mb-2">
+            <TabsList className="grid flex-1 grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 shrink-0">
             <TabsTrigger value="rewrite" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Viết lại</TabsTrigger>
             <TabsTrigger value="grammar" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kiểm tra</TabsTrigger>
             <TabsTrigger value="skills-action" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kỹ năng</TabsTrigger>
@@ -77,6 +92,7 @@ export default () => {
               </svg>
             </TabsTrigger>
           </TabsList>
+        </div>
 
           <TabsContent value="rewrite" className="flex-1 overflow-y-auto mt-2 min-h-0 pb-4">
             <RewriteTab docRef={docRef} systemPrompt={systemPrompt} skills={skills} />
