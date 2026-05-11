@@ -33,13 +33,13 @@ export async function analyzeTone(text: string, targetTone: string, language: st
   return response.json()
 }
 
-export async function analyzeRewrite(text: string, systemPrompt?: string) {
+export async function analyzeRewrite(text: string, context?: string, systemPrompt?: string, userPrompt?: string) {
   const response = await fetch(`${BACKEND_URL}/api/rewrite`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text, systemPrompt }),
+    body: JSON.stringify({ text, context, systemPrompt, userPrompt }),
   })
   
   if (!response.ok) {

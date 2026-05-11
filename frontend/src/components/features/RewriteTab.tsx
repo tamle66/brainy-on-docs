@@ -22,6 +22,7 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
   const [originalTextForUndo, setOriginalTextForUndo] = useState('');
   const [undoCountdown, setUndoCountdown] = useState(0);
   const [selectedStyleId, setSelectedStyleId] = useState('none');
+  const [userPrompt, setUserPrompt] = useState('');
   const [capturedBlockRefs, setCapturedBlockRefs] = useState<any[]>([]);
 
   const activeStyles = skills.filter((s) => s.isActive && s.category === 'style');
@@ -120,8 +121,14 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
         return;
       }
 
+      // Always try to get full doc text as context
+      let contextText = '';
+      if (docRef.current) {
+         contextText = await extractFullDocText(docRef);
+      }
+
       setCapturedBlockRefs(currentRefs);
-      const result = await analyzeRewrite(inputText, buildPrompt());
+      const result = await analyzeRewrite(inputText, contextText, buildPrompt(), userPrompt);
       setRewriteResult(result.rewritten_text || '');
     } catch (err: any) {
       console.error('Failed to rewrite:', err);
@@ -205,6 +212,15 @@ export const RewriteTab = ({ docRef, systemPrompt, skills = [] }: { docRef: any,
       {selectedStyle && (
         <p className="text-[11px] text-muted-foreground px-1 -mt-2">{selectedStyle.description}</p>
       )}
+
+      {/* User Prompt Textarea */}
+      <Textarea
+        placeholder="Yêu cầu cụ thể (VD: Làm đoạn này ngắn gọn hơn...)"
+        className="w-full text-sm min-h-[60px] resize-none"
+        value={userPrompt}
+        onChange={(e) => setUserPrompt(e.target.value)}
+        disabled={loading}
+      />
 
       {/* Rewrite button */}
       <Button

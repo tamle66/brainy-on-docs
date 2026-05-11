@@ -48,13 +48,13 @@ app.post('/api/analyze-tone', async (req, res) => {
 // Endpoint: Rewrite based on System Prompt
 app.post('/api/rewrite', async (req, res) => {
   try {
-    const { text, systemPrompt } = req.body;
+    const { text, context, systemPrompt, userPrompt } = req.body;
     
     if (!text) {
       return res.status(400).json({ error: 'Text is required' });
     }
 
-    const result = await analyzeRewrite(text, systemPrompt);
+    const result = await analyzeRewrite(text, context, systemPrompt, userPrompt);
     res.json(result);
   } catch (error) {
     console.error('Error in rewrite:', error.message);

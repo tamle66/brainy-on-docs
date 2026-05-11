@@ -13,11 +13,11 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
 | 4 | Inline Suggestion (Typing Check) | ✅ Done | main | Real-time grammar/spelling detect khi đang gõ |
 
 ## Active Tasks
-- [ ] Task 1: Backend API Setup (Rewrite Endpoint) — Module 2
-- [ ] Task 2: Frontend Foundation & State (Settings, UI Tabs) — Module 2
-- [x] Task 3: Lark SDK Integration (Get Selection) — Module 2
-- [ ] Task 4: AI Integration & UI Flow (Rewrite) — Module 2
-- [ ] Task 5: Lark SDK Integration (Replace Selection) — Module 2
+- [x] Task 1: Backend API Setup (Rewrite Endpoint) — Module 2
+- [x] Task 2: Frontend Foundation & State (Settings, UI Tabs) — Module 2
+- [x] Task 3: Lark SDK Integration (Get Selection & Context) — Module 2
+- [x] Task 4: AI Integration & UI Flow (Rewrite) — Module 2
+- [x] Task 5: Lark SDK Integration (Replace Selection) — Module 2
 - [x] Task 1: SkillsTab CRUD UI — Module 3
 - [x] Task 2: RewriteTab Skills Integration — Module 3
 - [x] Task 3: Cleanup (Preset→Skills unification) — Module 3
@@ -28,6 +28,7 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
   - [x] Quét song song (Parallel) & Hiển thị thời gian thực (Real-time update)
   - [x] Tối ưu hóa Token (Incremental block-level scanning)
   - [x] Điều hướng tới vị trí lỗi (Viewport navigation)
+  - [x] Bỏ qua vĩnh viễn lỗi bằng LocalStorage (Persistent Ignore History)
 
 ## 🚀 Sẵn sàng Deployment
 - [x] Cấu hình Webpack linh hoạt cho production

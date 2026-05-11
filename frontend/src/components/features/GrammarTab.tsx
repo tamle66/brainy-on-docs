@@ -28,6 +28,18 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
   const blockHashesRef = useRef<Map<number, string>>(new Map());
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isAnalyzingRef = useRef(false);
+  const ignoredSignaturesRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('lark_addon_ignored_errors');
+      if (stored) {
+        ignoredSignaturesRef.current = new Set(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.warn('Failed to load ignored errors:', e);
+    }
+  }, []);
 
   // ─── Core scan function (Incremental Parallel Block-level) ─────────────────
   const runScan = useCallback(async (force = false) => {
@@ -100,10 +112,16 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
               // Resolve positions within this specific block
               const resolvedBlockErrors = await resolveErrorsToRefs(blockErrors, [block]);
 
+              // Filter out ignored signatures
+              const validErrors = resolvedBlockErrors.filter(e => {
+                const sig = `${e.original}::${e.replacement}`;
+                return !ignoredSignaturesRef.current.has(sig);
+              });
+
               // Update errors state block-by-block (REAL-TIME UI UPDATE)
               setErrors(prev => {
                 const filtered = prev.filter(e => e.blockRef?.blockId !== block.id);
-                const newState = [...filtered, ...resolvedBlockErrors];
+                const newState = [...filtered, ...validErrors];
                 
                 // Re-apply highlights in background
                 applyErrorHighlights(newState).catch(() => {});
@@ -250,6 +268,15 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
       next.add(error.id);
       return next;
     });
+
+    // Persistent ignore
+    const sig = `${error.original}::${error.replacement}`;
+    ignoredSignaturesRef.current.add(sig);
+    try {
+      localStorage.setItem('lark_addon_ignored_errors', JSON.stringify(Array.from(ignoredSignaturesRef.current)));
+    } catch (e) {
+      console.warn('Failed to save ignored errors:', e);
+    }
 
     // Re-apply highlights minus this dismissed error
     const remaining = errors.filter((e) => e.id !== error.id && !dismissedIds.has(e.id));

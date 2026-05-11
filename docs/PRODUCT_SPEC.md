@@ -11,3 +11,5 @@ Xây dựng một extension kết nối giữa trình soạn thảo của Lark v
 3.3 Tùy chỉnh (Flexibility & Skills)
   - Cho phép người dùng tự tạo các preset về giọng điệu, phong cách viết và ngôn ngữ cho phù hợp với các hoàn cảnh soạn thảo khác nhau.
   - Cho phép sử dụng các Skills của JemOS để phục vụ các quy trình viết mang tính lặp lại.
+
+

@@ -1,13 +1,19 @@
 # Changelog
 Format: [date] [module] [type: feat/fix/refactor/docs] — description
 
+## [1.1.6] - 2026-05-11
+### Added
+- **Module 02: Core Rewrite Update**:
+  - Backend and Frontend now pass the full document text as `context` during rewrite to ensure AI has a broad understanding of the meaning before rewriting a specific selection.
+  - Added an optional `User Prompt` textarea in the Rewrite tab, allowing users to provide custom instructions alongside predefined styles.
+
 ## [1.1.5] - 2026-05-08
 ### Added
 - **Module 04: Inline Suggestion**:
   - Tự động phát hiện lỗi typing/grammar sau khi dừng gõ 1.5s.
   - Hiển thị danh sách Suggestion Cards trong tab "Kiểm tra".
   - Tự động highlight màu vàng + underline các từ lỗi trực tiếp trong Lark Docs dùng native SDK API.
-  - Hỗ trợ Apply (sửa trực tiếp vào doc) và Dismiss (ẩn highlight/card).
+  - Hỗ trợ Apply (sửa trực tiếp vào doc) và Dismiss (ẩn highlight/card). Tính năng Bỏ qua (Dismiss) đã được nâng cấp để lưu vĩnh viễn (persistent ignore history) các lỗi vào LocalStorage, giúp không hiển thị lại ở những lần kiểm tra sau.
   - Layout 4 tabs mới: Viết lại, Kiểm tra, Kỹ năng, Cài đặt.
   - Backend: Phân loại lỗi thành `spelling` và `grammar`.
 - **Optimization & UX Fix (GrammarTab)**:

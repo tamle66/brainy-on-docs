@@ -6,8 +6,9 @@
   1. Người dùng thiết lập System Prompt (ví dụ: "Dịch sang tiếng Anh", "Viết lại chuyên nghiệp hơn") trong tab Cài đặt hoặc tab Viết lại.
   2. Người dùng bôi đen một đoạn văn bản trong Lark Docs.
   3. Mở Add-on, chuyển sang tab "Viết lại" (Rewrite).
-  4. Bấm nút "Viết lại đoạn đã chọn". Add-on gọi backend gửi text + system prompt.
-  5. AI xử lý và trả về kết quả.
+  4. (Tùy chọn) Gõ thêm "Yêu cầu cụ thể" (user prompt) để chỉ thị cho AI biết cần sửa gì (VD: "Làm đoạn này ngắn hơn").
+  5. Bấm nút "Viết lại đoạn đã chọn". Add-on lấy văn bản đang chọn VÀ toàn bộ nội dung tài liệu (làm ngữ cảnh), gọi backend gửi text + context + system prompt + user prompt.
+  5. AI xử lý: Đọc toàn bộ ngữ cảnh tài liệu để hiểu ý nghĩa, sau đó chỉ viết lại đoạn văn bản được chọn.
   6. Người dùng xem trước kết quả và bấm "Áp dụng" (Replace) để thay thế đoạn văn bản đã chọn trong Lark Docs.
 - **Dependencies**: Module 1 (Lark Add-on Deployment) đã hoàn thành.
 - **Acceptance criteria**:
@@ -21,8 +22,9 @@
   - **Header**: Tên Add-on "Brainy in Docs" + Trạng thái kết nối.
   - **Tab Navigation**: 3 Tabs chính: `Kiểm tra` (Grammar), `Viết lại` (Rewrite), `Cài đặt` (Settings).
   - **Tab Viết lại (Rewrite)**:
-    - Khu vực hiển thị đoạn văn bản đang chọn (Read-only, max 3-4 dòng).
-    - Textarea để người dùng tùy chỉnh System Prompt nhanh (hoặc tải từ Settings).
+    - Khu vực hiển thị đoạn văn bản đang chọn (Read-only, max 3-4 dòng) hoặc thông báo sử dụng toàn bộ tài liệu.
+    - Dropdown chọn Phong cách viết (Styles lấy từ Skills).
+    - Textarea (Tùy chọn) để người dùng gõ yêu cầu cụ thể (User Prompt).
     - Nút chính: `Viết lại đoạn đã chọn` (Primary Button, có trạng thái Loading).
     - Khu vực kết quả: Hiển thị văn bản AI đã viết lại.
     - Hành động cho kết quả: `Áp dụng` (Primary), `Copy` (Outline), `Thử lại` (Ghost).
@@ -46,6 +48,7 @@
   - `isLoading`: Trạng thái call API.
 - **Lark Docs SDK Integration**:
   - Sử dụng API để lấy dữ liệu block đang được chọn (ví dụ: `getActiveDocumentRef().getSelection()`).
+  - Sử dụng API để lấy TOÀN BỘ nội dung tài liệu hiện tại (làm ngữ cảnh `context`).
   - Sử dụng API để sửa nội dung của block (ví dụ: `ActiveDocument` methods).
 
 ## 4. Technical Specs
@@ -55,7 +58,9 @@
     ```json
     {
       "text": "Đoạn văn bản cần viết lại...",
-      "systemPrompt": "Chỉ thị của người dùng (ví dụ: Dịch sang tiếng Anh)"
+      "context": "Toàn bộ nội dung tài liệu (để AI hiểu ngữ cảnh chung)...",
+      "systemPrompt": "Chỉ thị hệ thống (ví dụ: Dịch sang tiếng Anh)",
+      "userPrompt": "Yêu cầu cụ thể của người dùng (ví dụ: Làm cho câu văn ngắn gọn hơn)"
     }
     ```
   - **Response Body**:
@@ -65,7 +70,7 @@
     }
     ```
 - **AI Service (`aiService.js`)**:
-  - Viết hàm `analyzeRewrite(text, systemPrompt)` gọi Gemini. Đưa `systemPrompt` thành `role: 'system'` hoặc chèn vào đầu prompt text.
+  - Viết hàm `analyzeRewrite(text, context, systemPrompt, userPrompt)` gọi Gemini. Đưa `context` vào làm ngữ cảnh nền, `systemPrompt` thành `role: 'system'` và chèn `userPrompt` vào prompt gửi cho AI để yêu cầu viết lại đoạn `text`.
 - **Frontend Storage**:
   - Sử dụng `localStorage.setItem('lark_addon_system_prompt', ...)` để lưu.
 
@@ -73,6 +78,6 @@
 ### Các Tasks thực hiện (Mỗi task tương đương 1 session làm việc)
 - [ ] **Task 1: Backend API Setup** — Cập nhật `aiService.js` và `server.js` để thêm endpoint `/api/rewrite` hỗ trợ system prompt tùy chỉnh. (Size: S)
 - [ ] **Task 2: Frontend Foundation & State** — Cài đặt UI chuẩn với Shadcn (Tabs, Button, Textarea, Card) và tạo Tab `Settings` để quản lý `systemPrompt` (lưu localStorage). (Size: M)
-- [ ] **Task 3: Lark SDK Integration (Get Selection)** — Cập nhật `RewriteTab` để đọc văn bản được bôi đen từ Lark Docs (cần research tài liệu API). (Size: M)
+- [ ] **Task 3: Lark SDK Integration (Get Selection & Context)** — Cập nhật `RewriteTab` để đọc văn bản được bôi đen VÀ toàn bộ văn bản của tài liệu từ Lark Docs (cần research tài liệu API). (Size: M)
 - [ ] **Task 4: AI Integration & UI Flow** — Kết nối Frontend gọi API backend, xử lý loading state và hiển thị kết quả. (Size: S)
 - [ ] **Task 5: Lark SDK Integration (Replace Selection)** — Cập nhật `RewriteTab` để thêm chức năng "Áp dụng" - tự động thay thế văn bản bôi đen trong tài liệu. (Size: M)
