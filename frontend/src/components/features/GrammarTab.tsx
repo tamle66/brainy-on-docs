@@ -308,8 +308,22 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
       blockHashesRef.current.set(error.blockRef.blockId, hashText(updatedPlainText));
 
       // 2. Remove ONLY this error from local state immediately
+      // AND shift the ranges of any subsequent errors in the same block!
+      const shift = error.range ? error.replacement.length - (error.range[1] - error.range[0]) : 0;
+
       setErrors(prev => {
-        const updated = prev.filter((e) => e.id !== error.id);
+        const updated = prev.map((e) => {
+          if (e.id === error.id) return null;
+          
+          if (shift !== 0 && e.blockRef?.blockId === error.blockRef.blockId && e.range && error.range && e.range[0] >= error.range[1]) {
+            return {
+              ...e,
+              range: [e.range[0] + shift, e.range[1] + shift] as [number, number]
+            };
+          }
+          return e;
+        }).filter(Boolean) as GrammarError[];
+
         // Refresh highlights for remaining errors
         applyErrorHighlights(updated.filter(e => !dismissedIds.has(e.id))).catch(() => {});
         return updated;

@@ -112,7 +112,7 @@
 
 /* Markdown Styling */
 .markdown-content h1 { font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.markdown-content p { margin-bottom: 0.5rem; line-height: 1.5; }
+.markdown-content p { margin-bottom: 0.5rem; line-height: 1.5; white-space: pre-wrap; }
 .markdown-content ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
 .markdown-content li { margin-bottom: 0.25rem; }
 
