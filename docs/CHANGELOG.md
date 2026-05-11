@@ -13,6 +13,7 @@ Format: [date] [module] [type: feat/fix/refactor/docs] — description
   - Tự động phát hiện lỗi typing/grammar sau khi dừng gõ 1.5s.
   - Hiển thị danh sách Suggestion Cards trong tab "Kiểm tra".
   - Tự động highlight màu vàng + underline các từ lỗi trực tiếp trong Lark Docs dùng native SDK API.
+  - Tự động cuộn danh sách và làm nổi bật Suggestion Card khi người dùng click/di chuyển con trỏ chuột vào vùng văn bản bị lỗi.
   - Hỗ trợ Apply (sửa trực tiếp vào doc) và Dismiss (ẩn highlight/card). Tính năng Bỏ qua (Dismiss) đã được nâng cấp để lưu vĩnh viễn (persistent ignore history) các lỗi vào LocalStorage, giúp không hiển thị lại ở những lần kiểm tra sau.
   - Layout 4 tabs mới: Viết lại, Kiểm tra, Kỹ năng, Cài đặt.
   - Backend: Phân loại lỗi thành `spelling` và `grammar`.

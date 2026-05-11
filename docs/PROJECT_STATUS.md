@@ -29,6 +29,7 @@ Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Plann
   - [x] Tối ưu hóa Token (Incremental block-level scanning)
   - [x] Điều hướng tới vị trí lỗi (Viewport navigation)
   - [x] Bỏ qua vĩnh viễn lỗi bằng LocalStorage (Persistent Ignore History)
+  - [x] Tự động scroll và highlight Card theo vị trí con trỏ chuột
 
 ## 🚀 Sẵn sàng Deployment
 - [x] Cấu hình Webpack linh hoạt cho production

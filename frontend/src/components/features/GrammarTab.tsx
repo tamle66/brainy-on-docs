@@ -24,11 +24,18 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<ScanStatus>('idle');
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const [activeErrorId, setActiveErrorId] = useState<string | null>(null);
 
   const blockHashesRef = useRef<Map<number, string>>(new Map());
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const selectionDebounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isAnalyzingRef = useRef(false);
   const ignoredSignaturesRef = useRef<Set<string>>(new Set());
+  const errorsRef = useRef<GrammarError[]>([]);
+
+  useEffect(() => {
+    errorsRef.current = errors;
+  }, [errors]);
 
   useEffect(() => {
     try {
@@ -198,6 +205,60 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
     };
   }, [docRef, runScan]);
 
+  // ─── Auto-scroll on cursor change ──────────────────────────────────────────
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      clearTimeout(selectionDebounceRef.current);
+      selectionDebounceRef.current = setTimeout(async () => {
+        if (!docRef.current) return;
+        try {
+          const selection = await DocMiniApp.Selection.getSelection(docRef.current);
+          if (selection && selection.length > 0 && selection[0].type === 'text') {
+            const blockId = selection[0].ref.blockId;
+            const range = selection[0].ref.range;
+            
+            // Lấy danh sách lỗi LATEST từ ref
+            const currentErrors = errorsRef.current;
+            
+            // Tìm lỗi có chứa con trỏ
+            const activeErr = currentErrors.find(e => 
+              e.blockRef?.blockId === blockId && 
+              e.range && 
+              range[0] >= e.range[0] && 
+              range[0] <= e.range[1]
+            );
+
+            if (activeErr) {
+              setActiveErrorId(activeErr.id);
+              // Scroll card vào view
+              const el = document.getElementById(`suggestion-card-${activeErr.id}`);
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            } else {
+              setActiveErrorId(null);
+            }
+          } else {
+            setActiveErrorId(null);
+          }
+        } catch (err) {
+          console.warn('Failed to get selection for auto-scroll:', err);
+        }
+      }, 300); // Debounce 300ms
+    };
+
+    if (docRef.current) {
+      DocMiniApp.Selection.onSelectionChange(docRef.current, handleSelectionChange);
+    }
+    
+    return () => {
+      if (docRef.current) {
+        DocMiniApp.Selection.offSelectionChange(docRef.current, handleSelectionChange);
+      }
+      clearTimeout(selectionDebounceRef.current);
+    };
+  }, [docRef]);
+
   // ─── Apply handler ────────────────────────────────────────────────────────
   const handleApply = useCallback(async (error: GrammarError) => {
     const currentDocRef = docRef.current;
@@ -361,6 +422,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ docRef }) => {
                   error={error}
                   onApply={handleApply}
                   onDismiss={handleDismiss}
+                  isActive={activeErrorId === error.id}
                 />
               </div>
             ))}

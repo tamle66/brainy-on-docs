@@ -6,6 +6,7 @@ interface SuggestionCardProps {
   error: GrammarError;
   onApply: (error: GrammarError) => Promise<void>;
   onDismiss: (error: GrammarError) => void;
+  isActive?: boolean;
 }
 
 const TYPE_CONFIG = {
@@ -23,7 +24,7 @@ const TYPE_CONFIG = {
   },
 } as const;
 
-export const SuggestionCard: React.FC<SuggestionCardProps> = ({ error, onApply, onDismiss }) => {
+export const SuggestionCard: React.FC<SuggestionCardProps> = ({ error, onApply, onDismiss, isActive = false }) => {
   const [applying, setApplying] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -46,11 +47,13 @@ export const SuggestionCard: React.FC<SuggestionCardProps> = ({ error, onApply, 
 
   return (
     <div
+      id={`suggestion-card-${error.id}`}
       className={`
-        rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden
+        rounded-xl border bg-card shadow-sm overflow-hidden
         border-l-4 ${config.borderClass}
         transition-all duration-300 ease-out
-        ${dismissed ? 'opacity-0 -translate-x-2 scale-95 pointer-events-none' : 'opacity-100 translate-x-0 scale-100'}
+        ${isActive ? 'ring-2 ring-primary border-primary shadow-md scale-[1.02]' : 'border-border/50 scale-100'}
+        ${dismissed ? 'opacity-0 -translate-x-2 scale-95 pointer-events-none' : 'opacity-100 translate-x-0'}
       `}
     >
       {/* Header */}

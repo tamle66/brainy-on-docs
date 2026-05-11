@@ -3,14 +3,15 @@
 ## 1. Overview
 - **Goal**: Tự động phát hiện lỗi typing/grammar ngay khi người dùng dừng gõ (debounce 1.5s), hiển thị Suggestion Cards trong sidebar. Người dùng apply/dismiss từng suggestion — trải nghiệm Grammarly.
 - **Scope**:
-  - In-scope: Tab "Kiểm tra" mới, polling doc text, AI grammar check, apply/dismiss per error, persistent error ignore history (Bỏ qua vĩnh viễn).
+  - In-scope: Tab "Kiểm tra" mới, polling doc text, AI grammar check, apply/dismiss per error, persistent error ignore history (Bỏ qua vĩnh viễn), Auto-scroll & Highlight Suggestion Card khi con trỏ chuột nằm trong vùng văn bản bị lỗi.
   - Out-of-scope: Inline underline highlight trực tiếp trong editor (Lark SDK không hỗ trợ).
 
 ## 2. Requirements (Acceptance Criteria)
 - [x] Sidebar tự động phân tích sau khi người dùng dừng gõ ≥ 1.5s (debounce)
 - [x] Hiển thị danh sách lỗi: từ sai → gợi ý đúng + lý do + phân loại (spelling/grammar)
 - [x] Nút "Áp dụng" replace đúng từ sai trong tài liệu
-- [ ] Nút "Bỏ qua" dismiss suggestion và lưu vĩnh viễn (persistent ignore) để không bao giờ hiện lại trong tương lai
+- [x] Nút "Bỏ qua" dismiss suggestion và lưu vĩnh viễn (persistent ignore) để không bao giờ hiện lại trong tương lai
+- [ ] Tự động scroll sidebar và highlight Card gợi ý tương ứng khi người dùng di chuyển con trỏ vào text bị lỗi trong Lark Docs.
 - [x] Status bar: watching / analyzing / done / error
 - [x] Loading skeleton khi đang analyze
 - [x] Empty state: không lỗi / chưa có nội dung
@@ -88,6 +89,12 @@ interface GrammarError {
 - Lưu danh sách signature này vào `localStorage` (ví dụ: `lark_addon_ignored_errors`).
 - Khi backend trả về kết quả `checkGrammar`, Frontend sẽ filter (lọc) loại bỏ các lỗi có signature nằm trong danh sách đã ignore trước khi hiển thị cho người dùng.
 
+### 3.7 Cursor tracking & Auto-scroll
+- Sử dụng `DocMiniApp.Selection.onSelectionChange` để lắng nghe sự thay đổi con trỏ chuột.
+- Gọi `DocMiniApp.Selection.getSelection` để lấy vị trí con trỏ (blockId và range).
+- Kiểm tra xem blockId và range của con trỏ có giao thoa (overlap) với bất kỳ `error.range` nào trong danh sách lỗi hiện tại hay không.
+- Nếu có, set `activeErrorId` và dùng `element.scrollIntoView()` để cuộn Suggestion Card tương ứng lên giữa màn hình, đồng thời thêm hiệu ứng highlight viền nổi bật.
+
 ## 4. Implementation Plan
 
 ### Phase 1: Backend
@@ -98,7 +105,8 @@ interface GrammarError {
 
 ### Phase 3: UI Components
 - [x] Task 3: `SuggestionCard.tsx` — 2 variants spelling/grammar, animate dismiss — (Size: S)
-- [ ] Task 4: `GrammarTab.tsx` — Cập nhật logic Dismiss để lưu vào localStorage và filter danh sách lỗi — (Size: M)
+- [x] Task 4: `GrammarTab.tsx` — Cập nhật logic Dismiss để lưu vào localStorage và filter danh sách lỗi — (Size: M)
+- [ ] Task 4.1: Thêm `onSelectionChange` để track vị trí con trỏ, update `activeErrorId` và scrollIntoView. — (Size: M)
 - [x] Task 5: Apply logic — SDK find-replace hoặc clipboard fallback — (Size: M)
 
 ### Phase 4: Integration
