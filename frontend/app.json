@@ -7,7 +7,8 @@
   "contributes": {
     "topbar": {
       "initialHeight": 500,
-      "initialWidth": 450,
+      "initialWidth": 350,
+      "resizeType": "Free",
       "view": "index.html"
     }
   },

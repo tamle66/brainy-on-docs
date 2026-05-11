@@ -3,6 +3,7 @@ import { BlockitClient, DocumentRef } from '@lark-opdev/block-docs-addon-api';
 import './index.css';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GripVertical } from 'lucide-react';
 import { RewriteTab } from '@/components/features/RewriteTab';
 import { GrammarTab } from '@/components/features/GrammarTab';
 import { SkillsActionTab } from '@/components/features/SkillsActionTab';
@@ -54,7 +55,15 @@ export default () => {
   }, []);
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-background flex flex-col p-4 pt-2 font-sans text-foreground">
+    <div className="w-full h-screen overflow-hidden bg-background flex flex-col p-4 pt-2 font-sans text-foreground relative">
+      {/* Nút gợi ý kéo thả (Resize Hint) nằm ở sát mép trái */}
+      <div 
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-16 flex items-center justify-center text-muted-foreground/30 hover:text-muted-foreground/80 cursor-ew-resize transition-colors z-50 group"
+        title="Kéo mép trái để thay đổi kích thước"
+      >
+        <GripVertical className="w-3 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
+      </div>
+
       {isReady ? (
         <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col min-h-0">
           <TabsList className="grid w-full grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 mb-2 shrink-0">
