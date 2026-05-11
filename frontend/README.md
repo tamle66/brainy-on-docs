@@ -1,26 +1,22 @@
-###
-这是一个实时统计文档正文字数的小组件示例
+# Brainy AI - Frontend (Lark Docs Add-on)
 
-### 项目目录
-├── README.md
-├── app.json  #开发者配置文件
-├── node_modules
-├── package.json
-├── src #源代码目录
-├── tsconfig.json #ts配置
-└── webpack.config.js #构建工具
+Thành phần Frontend của dự án Brainy AI, được xây dựng bằng React và Webpack.
 
-### 安装依赖
-```
-npm install
-```
+## 🚀 Hướng dẫn nhanh
 
-### 启动工程
-```
-npm run start
-```
+1. Đảm bảo bạn đã cấu hình file `.env` ở thư mục gốc của project.
+2. Cài đặt các phụ thuộc:
+   ```bash
+   npm install
+   ```
+3. Chạy môi trường phát triển (Development):
+   ```bash
+   npm run start
+   ```
+4. Build và Upload lên Lark Console:
+   ```bash
+   npm run upload
+   ```
 
-### 上传小组件
-```
-npm run upload
-```
+> [!NOTE]
+> Để biết hướng dẫn chi tiết về cách thiết lập toàn bộ dự án, vui lòng tham khảo file [README.md chính ở thư mục gốc](../README.md).

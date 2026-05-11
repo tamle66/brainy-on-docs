@@ -1,5 +1,5 @@
 # Grammarly-like Add-on — Project Status
-Last updated: 2026-05-08 (Module 04 Planned)
+Last updated: 2026-05-11 (Fixed @lark-opdev/cli build issue)
 
 ## Current Phase
 Phase 2: Core Logic Implementation (Text Analysis & Auto-fix) — [Status: Planning]

@@ -12,17 +12,26 @@ Dự án bao gồm 2 thành phần chính:
 
 ---
 
-## 🚀 Hướng dẫn thiết lập & Chạy Local
+## 🚀 Hướng dẫn thiết lập & khởi chạy
 
 ### 1. Chuẩn bị ứng dụng trên Lark Developer Console
 1. Truy cập [Lark Developer Console](https://open.larksuite.com/app) và tạo một ứng dụng mới (Custom App).
 2. Thêm tính năng **Docs Add-on** (hoặc Gadget/Block).
 3. Lấy `App ID` và `App Secret` lưu vào biến môi trường.
+4. Vào phần `Add Feature`, tìm `Docss add-on`, bấm `Add`.
+5. Trong phần cài đặt của `Docs add-on`, copy `BlockTypeID` và lưu vào biến môi trường.
 
 ### 2. Thiết lập Biến môi trường
 Copy file `.env.example` thành `.env` (tại thư mục gốc) và điền các thông tin của bạn.
 
+> [!IMPORTANT]
+> Dự án sử dụng cơ chế **Dynamic Config**. Các giá trị `appID` và `blockTypeID` trong file `.env` sẽ tự động được script `generate-config.js` ghi đè vào cấu hình khi build/upload. Bạn **KHÔNG CẦN** sửa file `frontend/app.json` thủ công.
+
 ```bash
+# Windows (PowerShell/CMD)
+copy .env.example .env
+
+# macOS/Linux/Git Bash
 cp .env.example .env
 ```
 *(Tham khảo `.env.example` để biết chi tiết từng trường).*
@@ -51,7 +60,11 @@ opdev login
 cd frontend
 npm install
 npm run upload
-# Lệnh upload sẽ tự động build ra thư mục dist và đẩy lên nhánh Test trên Lark Console
+
+# 💡 Lưu ý: 
+# 1. Lệnh upload sẽ yêu cầu bạn nhập Version (ví dụ: 1.1.0) và Description trực tiếp trên terminal.
+# 2. Bạn cần đảm bảo đã chạy `opdev login` trước đó.
+# 3. Code sẽ được đẩy lên phân đoạn "Thử nghiệm" (Testing) trên Lark Console.
 ```
 
 

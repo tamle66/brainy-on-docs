@@ -1,6 +1,10 @@
 # Changelog
 Format: [date] [module] [type: feat/fix/refactor/docs] — description
 
+## [1.1.7] - 2026-05-11
+### Fixed
+- **Build Issue**: Sửa lỗi build failed `MODULE_NOT_FOUND` liên quan đến `@bdeefe/feishu-devtools-core`. Root cause: Package `@lark-opdev/cli` bị lỗi trong quá trình cài đặt (postinstall recovery failed). Đã xử lý bằng cách force reinstall package này.
+
 ## [1.1.6] - 2026-05-11
 ### Added
 - **Module 02: Core Rewrite Update**:

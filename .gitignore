@@ -44,4 +44,4 @@ temp/
 dummy/
 project.config.json
 index.json
-generate-config.js
+# (Removed generate-config.js from ignore list as it is a required build script)
