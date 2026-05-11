@@ -54,10 +54,10 @@ export default () => {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-screen bg-background flex flex-col p-4 pt-2 font-sans text-foreground">
+    <div className="w-full h-screen overflow-hidden bg-background flex flex-col p-4 pt-2 font-sans text-foreground">
       {isReady ? (
-        <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 mb-2">
+        <Tabs defaultValue="rewrite" className="w-full flex-1 flex flex-col min-h-0">
+          <TabsList className="grid w-full grid-cols-4 bg-muted/50 rounded-xl p-1 h-11 mb-2 shrink-0">
             <TabsTrigger value="rewrite" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Viết lại</TabsTrigger>
             <TabsTrigger value="grammar" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kiểm tra</TabsTrigger>
             <TabsTrigger value="skills-action" className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm font-semibold text-xs py-2 text-muted-foreground/70 transition-all">Kỹ năng</TabsTrigger>
@@ -69,19 +69,19 @@ export default () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="rewrite" className="flex-1 overflow-y-auto mt-4">
+          <TabsContent value="rewrite" className="flex-1 overflow-y-auto mt-2 min-h-0 pb-4">
             <RewriteTab docRef={docRef} systemPrompt={systemPrompt} skills={skills} />
           </TabsContent>
 
-          <TabsContent value="grammar" className="flex-1 overflow-y-auto mt-4">
+          <TabsContent value="grammar" className="flex-1 overflow-y-auto mt-2 min-h-0 pb-4">
             <GrammarTab docRef={docRef} />
           </TabsContent>
 
-          <TabsContent value="skills-action" className="flex-1 overflow-y-auto mt-4">
+          <TabsContent value="skills-action" className="flex-1 overflow-y-auto mt-2 min-h-0 pb-4">
             <SkillsActionTab docRef={docRef} skills={skills} />
           </TabsContent>
 
-          <TabsContent value="settings" className="flex-1 overflow-y-auto mt-4">
+          <TabsContent value="settings" className="flex-1 overflow-y-auto mt-2 min-h-0 pb-4">
             <SettingsTab systemPrompt={systemPrompt} setSystemPrompt={handleSetSystemPrompt} />
             <div className="mt-6 border-t border-border/60 pt-6">
               <SkillsTab skills={skills} onSkillsChange={handleSkillsChange} />
