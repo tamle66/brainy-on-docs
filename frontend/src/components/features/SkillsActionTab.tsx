@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { analyzeRewrite } from '@/services/api';
-import { extractFullDocText } from '@/services/lark';
+import { extractFullDocText, extractFullDocMarkdown } from '@/services/lark';
 import { DocMiniApp } from '@/App';
 import type { Skill } from './SkillsTab';
 import ReactMarkdown from 'react-markdown';
@@ -41,7 +41,7 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
     const handleSelectionChange = async () => {
       if (!docRef.current) return;
       try {
-        const text = await DocMiniApp.Selection.getSelectionAsPlainText(docRef.current);
+        const text = await DocMiniApp.Selection.getSelectionAsMarkdown(docRef.current);
         setSelectionText(text || '');
       } catch (err) {
         console.warn('Failed to get selection:', err);
@@ -73,7 +73,7 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
       
       if (!inputText && docRef.current) {
         console.log('No selection, extracting full doc text...');
-        inputText = await extractFullDocText(docRef);
+        inputText = await extractFullDocMarkdown();
       }
 
       if (!inputText) {
@@ -82,8 +82,15 @@ export const SkillsActionTab = ({ docRef, skills }: SkillsActionTabProps) => {
         return;
       }
 
+      // Lấy toàn bộ nội dung làm context
+      let contextText = '';
+      if (docRef.current) {
+         contextText = await extractFullDocMarkdown();
+      }
+
       console.log('Calling AI with prompt for skill:', skill.name);
-      const res = await analyzeRewrite(inputText, skill.prompt);
+      // text, context, systemPrompt, userPrompt
+      const res = await analyzeRewrite(inputText, contextText, skill.prompt);
       setResult(res.rewritten_text || '');
     } catch (err: any) {
       console.error('Skill execution failed:', err);
